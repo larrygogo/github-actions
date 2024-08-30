@@ -76,9 +76,11 @@ jobs:
             console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
 
             return {
-              version,
-              productName,
-              productNameLower
+              result: {
+                version: version,
+                productName: productName,
+                productNameLower: productNameLower
+              }
             }
 
       - name: Post Message (发送飞书 Webhook 消息)
