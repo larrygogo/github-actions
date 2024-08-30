@@ -3,10 +3,6 @@ name: Tauri CI
 on:
   workflow_call:
     inputs:
-      projectName:
-        required: true
-        type: string
-        description: "项目名称"
       buildStage:
         required: true
         type: string
@@ -42,7 +38,7 @@ on:
 jobs:
   build-tauri:
     outputs:
-      version: ${{ steps.get-version.outputs.result }}
+      project-info: ${{ steps.product-info.outputs.result }}
     strategy:
       fail-fast: false
       matrix:
@@ -61,8 +57,8 @@ jobs:
       - name: Checkout code (检出代码)
         uses: actions/checkout@v4
 
-      - name: Get Project Info
-        id: project-info
+      - name: Get Product Info
+        id: product-info
         uses: actions/script@v7
         with:
           script: |
@@ -94,11 +90,11 @@ jobs:
           content: |
             post:
               zh_cn:
-                title: ${{ inputs.projectName }} 开始构建
+                title: ${{ steps.product-info.outputs.result.productName }} 开始构建
                 content:
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ steps.project-info.outputs.result.version }}'
+                    text: '版本: ${{ steps.product-info.outputs.result.version }}'
                 - - tag: text
                     un_escape: true
                     text: '环境: ${{ inputs.buildStage }}'
@@ -161,16 +157,16 @@ jobs:
           content: |
             post:
               zh_cn:
-                title: ${{ inputs.projectName }} 构建完成
+                title: ${{ steps.product-info.outputs.result.productName }} 构建完成
                 content:
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ steps.project-info.outputs.result.version }} ${{ inputs.buildStage }} ${{ matrix.os }}'
+                    text: '版本: ${{ steps.product-info.outputs.result.version }} ${{ inputs.buildStage }} ${{ matrix.os }}'
                 - - tag: text
                     text: '下载链接: '
                   - tag: a
                     text: github action
-                    href: https://ipoasis-pic.s3.amazonaws.com/${{ steps.project-info.outputs.result.productNameLower }}/${{ steps.project-info.outputs.result.productNameLower }}-${{ matrix.os }}-${{ steps.project-info.outputs.result.version }}-${{ inputs.buildStage }}.tar.gz
+                    href: https://ipoasis-pic.s3.amazonaws.com/${{ steps.product-info.outputs.result.productNameLower }}/${{ steps.product-info.outputs.result.productNameLower }}-${{ matrix.os }}-${{ steps.product-info.outputs.result.version }}-${{ inputs.buildStage }}.tar.gz
 
   # publish-release:
   #   permissions:
