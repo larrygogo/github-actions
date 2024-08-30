@@ -10,7 +10,7 @@ on:
       nodeVersion:
         required: false
         type: string
-        default: "latest"
+        default: "lts/*"
         description: "Node 版本"
       buildFeishuWebhook:
         required: false
@@ -120,11 +120,6 @@ jobs:
         with:
           targets: "aarch64-apple-darwin,x86_64-apple-darwin"
 
-      - name: Setup pnpm (安装 pnpm)
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
-
       - name: Setup node (设置 node 版本)
         uses: actions/setup-node@v4
         with:
@@ -141,7 +136,7 @@ jobs:
           TAURI_PRIVATE_KEY: ${{ secrets.tauriPrivateKey }}
           TAURI_KEY_PASSWORD: ${{ secrets.tauriKeyPassword }}
         with:
-          includeRelease: true
+          tauriScript: "npm tauri"
           args: ${{ matrix.args }}
 
       - name: Upload Artifact (上传构建产物)
