@@ -6,26 +6,36 @@ on:
       projectName:
         required: true
         type: string
+        dependencies: "项目名称"
       buildStage:
         required: true
         type: string
+        dependencies: "构建阶段"
       nodeVersion:
-        required: true
-        type: string
-      awsRegion:
         required: false
         type: string
+        default: "latest"
+        dependencies: "Node 版本"
+      buildFeishuWebhook:
+        required: false
+        dependencies: "用于通知编译进程的 webhook 地址"
+      releaseFeishuWebhook:
+        required: false
+        dependencies: "构建成功后用于通知发布的 webhook 地址"
+
     secrets:
-      webhookFeishu:
-        required: true
-      awsAccessKey:
+      ossAccessKey:
         required: false
-      awsSecretKey:
+        dependencies: "OSS Access Key"
+      ossAccessKeySecret:
         required: false
+        dependencies: "OSS Secret Key"
       tauriPrivateKey:
         required: true
+        dependencies: "Tauri Private Key"
       tauriKeyPassword:
         required: true
+        dependencies: "Tauri Key Password"
 
 jobs:
   build-tauri:
@@ -59,7 +69,7 @@ jobs:
 
             // 清除空格
             const productNameLower = productName.replace(/\s/g, '_').toLowerCase()
-            
+
             execSync(`echo "version = ${version}"`)
             execSync(`echo "productName = ${productName}"`)
             execSync(`echo "productNameLower = ${productNameLower}"`)
