@@ -6,36 +6,36 @@ on:
       projectName:
         required: true
         type: string
-        dependencies: "项目名称"
+        description: "项目名称"
       buildStage:
         required: true
         type: string
-        dependencies: "构建阶段"
+        description: "构建阶段"
       nodeVersion:
         required: false
         type: string
         default: "latest"
-        dependencies: "Node 版本"
+        description: "Node 版本"
       buildFeishuWebhook:
         required: false
-        dependencies: "用于通知编译进程的 webhook 地址"
+        description: "用于通知编译进程的 webhook 地址"
       releaseFeishuWebhook:
         required: false
-        dependencies: "构建成功后用于通知发布的 webhook 地址"
+        description: "构建成功后用于通知发布的 webhook 地址"
 
     secrets:
       ossAccessKey:
         required: false
-        dependencies: "OSS Access Key"
+        description: "OSS Access Key"
       ossAccessKeySecret:
         required: false
-        dependencies: "OSS Secret Key"
+        description: "OSS Secret Key"
       tauriPrivateKey:
         required: true
-        dependencies: "Tauri Private Key"
+        description: "Tauri Private Key"
       tauriKeyPassword:
         required: true
-        dependencies: "Tauri Key Password"
+        description: "Tauri Key Password"
 
 jobs:
   build-tauri:
