@@ -56,6 +56,9 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
+      - name: Checkout code (检出代码)
+        uses: actions/checkout@v4
+
       - name: Get Project Info
         id: project-info
         uses: actions/script@v7
@@ -70,9 +73,9 @@ jobs:
             // 清除空格
             const productNameLower = productName.replace(/\s/g, '_').toLowerCase()
 
-            execSync(`echo "version = ${version}"`)
-            execSync(`echo "productName = ${productName}"`)
-            execSync(`echo "productNameLower = ${productNameLower}"`)
+            console.log(`version: ${version ? version : '未找到'}`)
+            console.log(`productName: ${productName ? productName : '未找到'}`)
+            console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
 
             return {
               version,
@@ -82,8 +85,9 @@ jobs:
 
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
+        if: ${{ inputs.buildFeishuWebhook }}
         with:
-          url: ${{ secrets.webhookFeishu }}
+          url: ${{ inputs.buildFeishuWebhook }}
           msg_type: post
           content: |
             post:
@@ -110,9 +114,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
-
-      - name: Checkout code (检出代码)
-        uses: actions/checkout@v4
 
       - name: Setup Rust (设置 Rust 版本)
         if: matrix.platform == 'macos'
