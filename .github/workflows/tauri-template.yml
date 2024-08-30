@@ -135,8 +135,13 @@ jobs:
 
       - name: Build tauri (构建 tauri)
         id: build
-        run: |
-          pnpm tauri build --release ${{ matrix.args }}
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PRIVATE_KEY: ${{ secrets.tauriPrivateKey }}
+          TAURI_KEY_PASSWORD: ${{ secrets.tauriKeyPassword }}
+        with:
+          args: ${{ matrix.args }}
 
       - name: Upload Artifact (上传构建产物)
         if: success() && matrix.platform == 'macos'
