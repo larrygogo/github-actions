@@ -141,6 +141,7 @@ jobs:
           TAURI_PRIVATE_KEY: ${{ secrets.tauriPrivateKey }}
           TAURI_KEY_PASSWORD: ${{ secrets.tauriKeyPassword }}
         with:
+          includeRelease: true
           args: ${{ matrix.args }}
 
       - name: Upload Artifact (上传构建产物)
