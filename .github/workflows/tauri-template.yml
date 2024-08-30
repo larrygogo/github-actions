@@ -65,21 +65,22 @@ jobs:
             const fs = require('fs')
             const path = require('path')
             const execSync = require('child_process').execSync
+
             const version = require('./package.json').version
             const productName = require('./src-tauri/tauri.conf.json').package.productName
-
-            // 清除空格
             const productNameLower = productName.replace(/\s/g, '_').toLowerCase()
 
             console.log(`version: ${version ? version : '未找到'}`)
             console.log(`productName: ${productName ? productName : '未找到'}`)
             console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
 
-            return JSON.stringify({
+            const result = {
               version: version,
               productName: productName,
               productNameLower: productNameLower
-            })
+            }
+
+            return result
 
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
@@ -94,7 +95,7 @@ jobs:
                 content:
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ fromJson(steps.product-info.outputs.result).version }}'
+                    text: '版本: ${{ steps.product-info.outputs.result.version }}'
                 - - tag: text
                     un_escape: true
                     text: '环境: ${{ inputs.buildStage }}'
