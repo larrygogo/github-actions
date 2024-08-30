@@ -75,13 +75,11 @@ jobs:
             console.log(`productName: ${productName ? productName : '未找到'}`)
             console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
 
-            return {
-              result: {
-                version: version,
-                productName: productName,
-                productNameLower: productNameLower
-              }
-            }
+            return JSON.stringify({
+              version: version,
+              productName: productName,
+              productNameLower: productNameLower
+            })
 
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
@@ -92,11 +90,11 @@ jobs:
           content: |
             post:
               zh_cn:
-                title: ${{ steps.product-info.outputs.result.productName }} 开始构建
+                title: ${{ fromJson(steps.product-info.outputs.result).productName }} 开始构建
                 content:
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ steps.product-info.outputs.result.version }}'
+                    text: '版本: ${{ fromJson(steps.product-info.outputs.result).version }}'
                 - - tag: text
                     un_escape: true
                     text: '环境: ${{ inputs.buildStage }}'
@@ -154,21 +152,21 @@ jobs:
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
         with:
-          url: https://open.feishu.cn/open-apis/bot/v2/hook/54c1e388-3fef-4583-a4ab-3c8ec8f75f8a
+          url: ${{ inputs.buildFeishuWebhook }}
           msg_type: post
           content: |
             post:
               zh_cn:
-                title: ${{ steps.product-info.outputs.result.productName }} 构建完成
+                title: ${{ fromJson(steps.product-info.outputs.result).productName }} 构建完成
                 content:
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ steps.product-info.outputs.result.version }} ${{ inputs.buildStage }} ${{ matrix.os }}'
+                    text: '版本: ${{ fromJson(steps.product-info.outputs.result).version }} ${{ inputs.buildStage }} ${{ matrix.os }}'
                 - - tag: text
                     text: '下载链接: '
                   - tag: a
                     text: github action
-                    href: https://ipoasis-pic.s3.amazonaws.com/${{ steps.product-info.outputs.result.productNameLower }}/${{ steps.product-info.outputs.result.productNameLower }}-${{ matrix.os }}-${{ steps.product-info.outputs.result.version }}-${{ inputs.buildStage }}.tar.gz
+                    href: https://ipoasis-pic.s3.amazonaws.com/${{ fromJson(steps.product-info.outputs.result).productNameLower }}/${{ fromJson(steps.product-info.outputs.result).productNameLower }}-${{ matrix.os }}-${{fromJson(steps.product-info.outputs.result).version }}-${{ inputs.buildStage }}.tar.gz
 
   # publish-release:
   #   permissions:
