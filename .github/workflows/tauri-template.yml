@@ -95,7 +95,7 @@ jobs:
                 content:
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ steps.product-info.outputs.result.version }}'
+                    text: '版本: ${{ fromJson(steps.product-info.outputs.result).version }}'
                 - - tag: text
                     un_escape: true
                     text: '环境: ${{ inputs.buildStage }}'
@@ -135,7 +135,7 @@ jobs:
 
       - name: Build tauri (构建 tauri)
         id: build
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v0.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_PRIVATE_KEY: ${{ secrets.tauriPrivateKey }}
@@ -160,9 +160,15 @@ jobs:
               zh_cn:
                 title: ${{ fromJson(steps.product-info.outputs.result).productName }} 构建完成
                 content:
+                 - - tag: text
+                    un_escape: true
+                    text: '版本: ${{ fromJson(steps.product-info.outputs.result).version }}'
                 - - tag: text
                     un_escape: true
-                    text: '版本: ${{ fromJson(steps.product-info.outputs.result).version }} ${{ inputs.buildStage }} ${{ matrix.os }}'
+                    text: '环境: ${{ inputs.buildStage }}'
+                - - tag: text
+                    un_escape: true
+                    text: '平台: ${{ matrix.os }}'
                 - - tag: text
                     text: '下载链接: '
                   - tag: a
