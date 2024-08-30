@@ -18,9 +18,11 @@ on:
         description: "Node 版本"
       buildFeishuWebhook:
         required: false
+        type: string
         description: "用于通知编译进程的 webhook 地址"
       releaseFeishuWebhook:
         required: false
+        type: string
         description: "构建成功后用于通知发布的 webhook 地址"
 
     secrets:
