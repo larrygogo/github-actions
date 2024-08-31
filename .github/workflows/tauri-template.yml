@@ -61,8 +61,7 @@ jobs:
         id: product-info
         uses: actions/github-script@v7
         with:
-          modules: true
-          type: "module"
+          result-encoding: json
           script: |
             const version = require('./package.json').version
             const productName = require('./src-tauri/tauri.conf.json').package.productName
@@ -72,9 +71,11 @@ jobs:
             console.log(`productName: ${productName ? productName : '未找到'}`)
             console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
 
-            core.setOutput('version', version)
-            core.setOutput('productName', productName)
-            core.setOutput('productNameLower', productNameLower)
+            return {
+              version: version,
+              productName: productName,
+              productNameLower: productNameLower
+            }
 
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
