@@ -256,6 +256,7 @@ jobs:
           # use your own endpoint
           # endpoint: oss-cn-hangzhou.aliyuncs.com
           endpoint: oss-rg-china-mainland.aliyuncs.com
+          incremental: true
           folder: "./releases/${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}"
 
       - name: Post Message (发送飞书 Webhook 消息)
