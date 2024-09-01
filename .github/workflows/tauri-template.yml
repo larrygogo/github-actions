@@ -66,7 +66,7 @@ jobs:
           script: |
             const version = require('./package.json').version
             const productName = require('./src-tauri/tauri.conf.json').package.productName
-            const linuxFileAppName  = productName.
+            const linuxFileAppName  = productName
               .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
               .replace(/([A-Z])([A-Z])(?=[a-z])/g, '$1-$2')
               .replace(/[ _.]/g, '-')
