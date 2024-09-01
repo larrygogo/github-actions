@@ -232,7 +232,7 @@ jobs:
               pub_date: new Date().toISOString(),
               platform: {
                 // "windows-x86_64": {
-                #   // url: `https://ipoasis-pic.s3.amazonaws.com/${windows}`,
+                //   // url: `https://ipoasis-pic.s3.amazonaws.com/${windows}`,
                 //   url: `https://oss.larryoss.com/${productName}/${windowsApp}`,
                 //   signature: windowsSigContent
                 // },
