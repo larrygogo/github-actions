@@ -75,7 +75,7 @@ jobs:
 
             console.log(`version: ${version ? version : '未找到'}`)
             console.log(`productName: ${productName ? productName : '未找到'}`)
-            console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
+            console.log(`linuxFileAppName: ${linuxFileAppName ? linuxFileAppName : '未找到'}`)
 
             return {
               version,
