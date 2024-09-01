@@ -143,7 +143,7 @@ jobs:
         with:
           if-no-files-found: error
           name: macos-bundle
-          path: ./src-tauri/target/release/bundle/macos
+          path: src-tauri/target/release/bundle/macos
 
       - name: Upload Artifact (上传构建产物)
         if: success() && matrix.os == 'windows'
@@ -151,7 +151,7 @@ jobs:
         with:
           if-no-files-found: error
           name: windows-bundle
-          path: ./src-tauri/target/release/bundle/msi
+          path: src-tauri/target/release/bundle/msi
 
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
