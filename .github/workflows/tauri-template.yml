@@ -189,7 +189,7 @@ jobs:
       - name: Download Artifact (下载构建产物)
         uses: actions/download-artifact@v3
         with:
-          path: ./releases
+          path: ./releases/tarui-test
           name: |
             macos-bundle
             windows-bundle
@@ -204,7 +204,7 @@ jobs:
           result-encoding: json
           script: |
             const fs = require('fs')
-            const releases = fs.readdirSync('./releases')
+            const releases = fs.readdirSync('./releases/tarui-test')
 
             const productName = process.env.PRODUCT_NAME
 
@@ -235,7 +235,7 @@ jobs:
               }
             }
 
-            fs.writeFileSync('./updater/install.json', JSON.stringify(updateData, null, 2))
+            fs.writeFileSync(`./release/${productName}/install.json`, JSON.stringify(updateData, null, 2))
 
             return updateData
 
