@@ -66,16 +66,21 @@ jobs:
           script: |
             const version = require('./package.json').version
             const productName = require('./src-tauri/tauri.conf.json').package.productName
-            const productNameLower = productName.replace(/\s/g, '_').toLowerCase()
+            const linuxFileAppName  = productName.
+              .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+              .replace(/([A-Z])([A-Z])(?=[a-z])/g, '$1-$2')
+              .replace(/[ _.]/g, '-')
+              .replace(/[()[\]{}]/g, '')
+              .toLowerCase();
 
             console.log(`version: ${version ? version : '未找到'}`)
             console.log(`productName: ${productName ? productName : '未找到'}`)
             console.log(`productNameLower: ${productNameLower ? productNameLower : '未找到'}`)
 
             return {
-              version: version,
-              productName: productName,
-              productNameLower: productNameLower
+              version,
+              productName,
+              linuxFileAppName
             }
 
       - name: Post Message (发送飞书 Webhook 消息)
@@ -140,10 +145,19 @@ jobs:
 
       - name: Upload Artifact (上传构建产物)
         uses: actions/upload-artifact@v3
+        if: success() && matrix.os == 'macos'
         with:
           if-no-files-found: error
           name: ${{ matrix.os }}-bundle
-          path:  ${{ steps.build.outputs.artifactPaths }}
+          path: ./src-tauri/target/release/bundle/macos
+
+      - name: Upload Artifact (上传构建产物)
+        uses: actions/upload-artifact@v3
+        if: success() && matrix.os == 'windows'
+        with:
+          if-no-files-found: error
+          name: ${{ matrix.os }}-bundle
+          path: ./src-tauri/target/release/bundle/msi
 
       - name: Post Message (发送飞书 Webhook 消息)
         uses: foxundermoon/feishu-action@v2
@@ -165,11 +179,6 @@ jobs:
                 - - tag: text
                     un_escape: true
                     text: '平台: ${{ matrix.os }}'
-                - - tag: text
-                    text: '下载链接: '
-                  - tag: a
-                    text: github action
-                    href: https://ipoasis-pic.s3.amazonaws.com/${{ fromJson(steps.product-info.outputs.result).productNameLower }}/${{ fromJson(steps.product-info.outputs.result).productNameLower }}-${{ matrix.os }}-${{fromJson(steps.product-info.outputs.result).version }}-${{ inputs.buildStage }}.tar.gz
 
   publish-release:
     permissions:
@@ -199,18 +208,21 @@ jobs:
           bucket: larryoss
           # use your own endpoint
           endpoint: oss-cn-hangzhou-internal.aliyuncs.com
-          folder: tauri-test
+          folder: ${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
 
       - name: build install.json
         uses: actions/github-script@v7
         id: install-info
         env:
           VERSION: ${{ fromJson(needs.build-tauri.outputs.project-info).version }}
+          PRODUCT_NAME: ${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
         with:
           result-encoding: json
           script: |
             const fs = require('fs')
             const releases = fs.readdirSync('./releases')
+
+            const productName = process.env.PRODUCT_NAME
 
             // windows
             const windowsApp = releases.find(release => release.endsWith('.msi.zip'))
@@ -229,11 +241,11 @@ jobs:
               platform: {
                 "windows-x86_64": {
                   // url: `https://ipoasis-pic.s3.amazonaws.com/${windows}`,
-                  url: `https://oss.larryoss.com/tauri-test/${windowsApp}`,
+                  url: `https://oss.larryoss.com/${productName}/${windowsApp}`,
                   signature: windowsSigContent
                 },
                 "darwin-aarch64": {
-                  url: `https://ipoasis-pic.s3.amazonaws.com/${macos}`,
+                  url: `https://oss.larryoss.com/${productName}/${macos}`,
                   signature: macosSigContent
                 }
               }
