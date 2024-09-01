@@ -254,7 +254,7 @@ jobs:
           accessKeySecret: ${{ secrets.ossAccessKeySecret }}
           bucket: larryoss
           # use your own endpoint
-          endpoint: oss-cn-hangzhou-internal.aliyuncs.com
+          endpoint: oss-cn-hangzhou.aliyuncs.com
           folder: ${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
 
       - name: deploy install.json (部署 install.json)
