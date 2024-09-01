@@ -208,7 +208,7 @@ jobs:
           result-encoding: json
           script: |
             const fs = require('fs')
-            const releases = fs.readdirSync('./releases/${productName}')
+            const releases = fs.readdirSync(`./releases/${productName}`)
 
             const productName = process.env.PRODUCT_NAME
 
