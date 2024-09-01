@@ -217,9 +217,9 @@ jobs:
 
 
             // windows
-            # const windowsApp = releases.find(release => release.endsWith('.msi.zip'))
-            # const windowsSig = releases.find(release => release.endsWith('.msi.zip.sig'))
-            # const windowsSigContent = fs.readFileSync(`./releases/${productName}/${windowsSig}`, 'utf-8')
+            // const windowsApp = releases.find(release => release.endsWith('.msi.zip'))
+            // const windowsSig = releases.find(release => release.endsWith('.msi.zip.sig'))
+            // const windowsSigContent = fs.readFileSync(`./releases/${productName}/${windowsSig}`, 'utf-8')
 
             // macos
             const macosApp = releases.find(release => release.includes('.app.zip'))
@@ -231,11 +231,11 @@ jobs:
               note: `v${process.env.VERSION}`,
               pub_date: new Date().toISOString(),
               platform: {
-                # "windows-x86_64": {
+                // "windows-x86_64": {
                 #   // url: `https://ipoasis-pic.s3.amazonaws.com/${windows}`,
-                #   url: `https://oss.larryoss.com/${productName}/${windowsApp}`,
-                #   signature: windowsSigContent
-                # },
+                //   url: `https://oss.larryoss.com/${productName}/${windowsApp}`,
+                //   signature: windowsSigContent
+                // },
                 "darwin-aarch64": {
                   url: `https://oss.larryoss.com/${productName}/${macos}`,
                   signature: macosSigContent
