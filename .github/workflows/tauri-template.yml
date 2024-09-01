@@ -1,8 +1,5 @@
 name: Tauri CI
 
-permissions:
-  contents: write
-
 on:
   workflow_call:
     inputs:
@@ -183,6 +180,8 @@ jobs:
                     href: https://ipoasis-pic.s3.amazonaws.com/${{ fromJson(steps.product-info.outputs.result).productNameLower }}/${{ fromJson(steps.product-info.outputs.result).productNameLower }}-${{ matrix.os }}-${{fromJson(steps.product-info.outputs.result).version }}-${{ inputs.buildStage }}.tar.gz
 
   publish-release:
+    permissions:
+      contents: write
     runs-on: [linux]
     needs: [build-tauri]
     steps:
