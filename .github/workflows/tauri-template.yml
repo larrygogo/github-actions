@@ -112,7 +112,7 @@ jobs:
       - name: Setup Rust (设置 Rust 版本)
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.os == 'macos' && 'aarch64-apple-darwin,x86_64-apple-darwin'}}
+          targets: ${{ matrix.os == 'macos' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
       - name: Setup pnpm (安装 pnpm)
         uses: pnpm/action-setup@v4
