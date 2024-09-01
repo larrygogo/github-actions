@@ -189,13 +189,13 @@ jobs:
       - name: Download Windows Artifact (下载构建产物)
         uses: actions/download-artifact@v3
         with:
-          path: ./releases/tarui-test
+          path: ./releases/${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
           name: windows-bundle
 
       - name: Download MacOS Artifact (下载构建产物)
         uses: actions/download-artifact@v3
         with:
-          path: ./releases/tarui-test
+          path: ./releases/${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
           name: macos-bundle
 
       - name: build install.json
@@ -208,19 +208,19 @@ jobs:
           result-encoding: json
           script: |
             const fs = require('fs')
-            const releases = fs.readdirSync('./releases/tarui-test')
+            const releases = fs.readdirSync('./releases/${productName}')
 
             const productName = process.env.PRODUCT_NAME
 
             // windows
             const windowsApp = releases.find(release => release.endsWith('.msi.zip'))
             const windowsSig = releases.find(release => release.endsWith('.msi.zip.sig'))
-            const windowsSigContent = fs.readFileSync(`./releases/${windowsSig}`, 'utf-8')
+            const windowsSigContent = fs.readFileSync(`./releases/${productName}/${windowsSig}`, 'utf-8')
 
             // macos
             const macosApp = releases.find(release => release.includes('.app.zip'))
             const macosSig = releases.find(release => release.includes('.app.zip.sig'))
-            const macosSigContent = fs.readFileSync(`./releases/${macosSig}`, 'utf-8')
+            const macosSigContent = fs.readFileSync(`./releases/${productName}/${macosSig}`, 'utf-8')
 
             const updateData = {
               version: `v${process.env.VERSION}`,
