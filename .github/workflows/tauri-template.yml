@@ -186,13 +186,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-tauri]
     steps:
-      - name: Download Artifact (下载构建产物)
+      - name: Download Windows Artifact (下载构建产物)
         uses: actions/download-artifact@v3
         with:
           path: ./releases/tarui-test
-          name: |
-            macos-bundle
-            windows-bundle
+          name: windows-bundle
+
+      - name: Download MacOS Artifact (下载构建产物)
+        uses: actions/download-artifact@v3
+        with:
+          path: ./releases/tarui-test
+          name: macos-bundle
 
       - name: build install.json
         uses: actions/github-script@v7
