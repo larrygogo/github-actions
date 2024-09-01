@@ -232,12 +232,12 @@ jobs:
               pub_date: new Date().toISOString(),
               platform: {
                 "windows-x86_64": {
-                  // url: `https://ipoasis-pic.s3.amazonaws.com/${windows}`,
+                  // url: `https://ipoasis-pic.s3.amazonaws.com/${windowsApp}`,
                   url: `https://oss.larryoss.com/${productName}/${windowsApp}`,
                   signature: windowsSigContent
                 },
                 "darwin-aarch64": {
-                  url: `https://oss.larryoss.com/${productName}/${macos}`,
+                  url: `https://oss.larryoss.com/${productName}/${macosApp}`,
                   signature: macosSigContent
                 }
               }
