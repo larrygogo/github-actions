@@ -194,22 +194,6 @@ jobs:
             macos-bundle
             windows-bundle
 
-      - name: Run script
-        run: pnpm install && pnpm updater
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ fromJson(needs.build-tauri.outputs.project-info).version }}
-
-      - name: upload files to OSS
-        uses: fangbinwei/aliyun-oss-website-action@v1
-        with:
-          accessKeyId: ${{ secrets.ossAccessKey }}
-          accessKeySecret: ${{ secrets.ossAccessKeySecret }}
-          bucket: larryoss
-          # use your own endpoint
-          endpoint: oss-cn-hangzhou-internal.aliyuncs.com
-          folder: ${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
-
       - name: build install.json
         uses: actions/github-script@v7
         id: install-info
@@ -255,16 +239,15 @@ jobs:
 
             return updateData
 
-      # - name: Upload to S3
-      #   uses: keithweaver/aws-s3-github-action@v1.0.0
-      #   with:
-      #     command: cp
-      #     source: ./releases/
-      #     destination: s3://ipoasis-pic/proxy_tester/${{ needs.create-release.outputs.version }}/
-      #     aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_MAIN }}
-      #     aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY_MAIN }}
-      #     aws_region: us-east-1
-      #     flags: --acl public-read --recursive
+      - name: upload files to OSS
+        uses: fangbinwei/aliyun-oss-website-action@v1
+        with:
+          accessKeyId: ${{ secrets.ossAccessKey }}
+          accessKeySecret: ${{ secrets.ossAccessKeySecret }}
+          bucket: larryoss
+          # use your own endpoint
+          endpoint: oss-cn-hangzhou-internal.aliyuncs.com
+          folder: ${{ fromJson(needs.build-tauri.outputs.project-info).linuxFileAppName }}
 
       - name: deploy install.json (部署 install.json)
         uses: peaceiris/actions-gh-pages@v3
