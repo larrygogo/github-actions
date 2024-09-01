@@ -208,9 +208,10 @@ jobs:
           result-encoding: json
           script: |
             const fs = require('fs')
-            const releases = fs.readdirSync(`./releases/${productName}`)
 
             const productName = process.env.PRODUCT_NAME
+
+            const releases = fs.readdirSync(`./releases/${productName}`)
 
             // windows
             const windowsApp = releases.find(release => release.endsWith('.msi.zip'))
