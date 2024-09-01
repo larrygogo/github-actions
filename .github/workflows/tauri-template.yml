@@ -183,7 +183,7 @@ jobs:
   publish-release:
     permissions:
       contents: write
-    runs-on: [linux]
+    runs-on: ubuntu-latest
     needs: [build-tauri]
     steps:
       - name: Download Artifact (下载构建产物)
